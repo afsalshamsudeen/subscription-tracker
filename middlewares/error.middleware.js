@@ -5,18 +5,18 @@ const errorMiddleware =(err, req, res, next) => {
         console.error(err);
 
         // MONGOOSE bad OBJECTID
-        if(err.name == 'CasteError'){
+        if(err.name === 'CasteError'){
             const message = 'Resourse not found';
             error = new Error(message)
             error.statusCode = 404;
         }
 
-        if(err.code == 11000){
+        if(err.code === 11000){
             const message = 'Duplicate feild value entered';
             error = new Error(message)
             error.statusCode = 400;
         }
-        if(err.name == 'ValidationError'){
+        if(err.name === 'ValidationError'){
             const message = Object.values(err.errors).map(val => val.message);
             error = new Error(message.join(', '));
             error.statusCode = 400;
