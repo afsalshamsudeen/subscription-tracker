@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import {  JWT_SECRET, JWT_EXPIRES_IN} from "../config/env.js";
 
-export const signup = async ( req, res, next) => {
+export const signUp = async ( req, res, next) => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -43,6 +43,38 @@ export const signup = async ( req, res, next) => {
 
 }
 
-export const signin = async (req, res, next) =>{}
+export const signIn = async (req, res, next) =>{
+    try{
+        const {email, password} = req.body;
+        const user = await User.findOne({email});
 
-export const signout = async (req, res, next) => {}
+        if(!user){
+            const error = new Error('user not found');
+            error.statusCode = 404;
+            throw(error);
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if(!isPasswordValid){
+            const error= new Error('Invalid password');
+            error.statusCode = 401;
+            throw(error);
+        }
+
+        const token = jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
+
+        res.status(201).json({
+            success:true,
+            message:'user signed in',
+            data:{
+                token,
+                user,
+            }
+
+        })
+    }catch(error){
+        next(error);
+    }
+}
+
+//export const signOut = async (req, res, next) => {}
