@@ -22,7 +22,7 @@ export const signUp = async ( req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, salt);
         
         const newUsers = await User.create([{name, email, password:hashedPassword}], {session});
-        const token = jwt.sign({userId:newUsers[0].id}, JWT_SECRET, {expiresIn:JWT_EXPIRES_IN} );
+        const token = jwt.sign({userId:newUsers[0]._id}, JWT_SECRET, {expiresIn:JWT_EXPIRES_IN} );
         await session.commitTransaction();
         session.endSession();
         
@@ -61,7 +61,7 @@ export const signIn = async (req, res, next) =>{
             throw(error);
         }
 
-        const token = jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
+        const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
 
         res.status(201).json({
             success:true,
@@ -77,4 +77,4 @@ export const signIn = async (req, res, next) =>{
     }
 }
 
-//export const signOut = async (req, res, next) => {}
+export const signOut = async () => {}

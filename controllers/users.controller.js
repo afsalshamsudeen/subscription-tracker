@@ -12,7 +12,7 @@ export const fetchUsers = async (req, res, next) => {
 }
 
 // get only one user by id
-export const fetchUser = async (req, res,next) => {
+export const getUser = async (req, res,next) => {
     try{
         const user = await User.findById(req.params.id).select('-password');
 

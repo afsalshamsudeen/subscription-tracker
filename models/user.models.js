@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
-        require:[true, 'User must enter a valid name'],
+        require:[true, 'User must enter a valid username'],
         unique:true,
         trim:true,
-        minLength:2,
+        minLength:[2, 'minimum 2 characters'],
         maxLength:50,
     },
     email:{
@@ -15,8 +15,6 @@ const userSchema = new mongoose.Schema({
         unique:true,
         trim:true,
         lowecase:true,
-        minLength:5,
-        maxLength:255,
         match:[/\S+@\S+\.\S+/, 'please fill valid email address'],
     },
     password:{
