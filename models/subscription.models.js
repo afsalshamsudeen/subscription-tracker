@@ -3,36 +3,36 @@ import mongoose from "mongoose";
 const subscriptionSchema = new mongoose.Schema({
     name:{
         type:String,
-        require:[true, 'Subscription name required'],
+        required:[true, 'Subscription name required'],
         trim:true,
         minLength:2,
         maxLenght:100,
     },
     price:{
         type:Number,
-        require:[true, 'Subscription price must be specified'],
+        required:[true, 'Subscription price must be specified'],
         min:[0, 'price must be greater than ZERO!']
     },
     currency:{
         type:String,
-        require:[true, 'must add currency'],
+        required:[true, 'must add currency'],
         enum:['INR', 'USD', 'EUR'],
         default:'INR'
     },
     frequency:{
         type:String,
-        enum:['daily', 'weekly', 'montly', 'yearly'],
+        enum:['daily', 'weekly', 'monthly', 'yearly'],
         default:'monthly',
     },
     category:{
         type:String,
-        require:true,
+        required:true,
         enum:['sports', 'arts', 'entertainment', 'lifestyle', 'finance', 'technology', 'other'],
 
     }
     ,paymentMethod:{
-        type:true,
-        require:true,
+        type:String,
+        required:true,
         trim:true
     },
     status:{
@@ -42,7 +42,7 @@ const subscriptionSchema = new mongoose.Schema({
     },
     startDate:{
         type:Date,
-        require:true,
+        required:true,
         validate:{
             validator:(value) => value <= new Date(),
             message:'Start date must be in past', 
@@ -50,7 +50,7 @@ const subscriptionSchema = new mongoose.Schema({
     },
     renewalDate:{
         type:Date,
-        require:false,
+        required:false,
         validate:{
             validator: function (value) {
                 return value > this.startDate;
@@ -61,7 +61,7 @@ const subscriptionSchema = new mongoose.Schema({
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
-        require:true,
+        required:true,
         index:true
     }
 
